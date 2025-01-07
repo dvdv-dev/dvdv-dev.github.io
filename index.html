@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, height=device-height, minimum-scale=1, initial-scale=1, maximum-scale=1"/>
+    <title>dvdv.dev</title>
+    <link rel="icon" type="image/svg+xml"
+          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1337' height='1337' fill='%23989898'%3E%3C/rect%3E%3C/svg%3E"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex&display=swap" rel="stylesheet"/>
+</head>
+<style>
+    * {
+        pointer-events: none;
+        user-select: none;
+    }
+
+    body {
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+        background: black;
+        margin: 0;
+    }
+
+    .hidden {
+        visibility: hidden !important;
+    }
+
+    .wait {
+        font-size: calc(100vh / 6);
+        line-height: calc(100vh / 7.6);
+        font-weight: bold;
+    }
+
+    .line {
+        width: 100%;
+        height: calc(100vh / 6);
+    }
+
+    .line:nth-child(2n) {
+        background: white;
+        color: black;
+    }
+
+    .line:nth-child(2n - 1) {
+        color: white;
+        background: black;
+    }
+
+    @keyframes move-left {
+        0% {
+            transform: translate(0, 0);
+        }
+        100% {
+            transform: translate(-100%, 0);
+        }
+    }
+
+    @keyframes move-right {
+        0% {
+            transform: translate(-100%, 0);
+        }
+        100% {
+            transform: translate(0, 0);
+        }
+    }
+
+    .line:nth-child(2n) div span {
+        animation-name: move-right !important;
+    }
+
+    .roboto-flex {
+        font-family: "Roboto Flex", monospace;
+        font-style: italic;
+    }
+
+    .line div {
+        position: absolute;
+    }
+
+    .line div span {
+        display: inline-block;
+        padding-left: 100%;
+        animation: move-left 6s linear infinite;
+    }
+
+    .line div:nth-child(1) span {
+        animation-delay: -3s !important;
+    }
+
+    .line div:nth-child(2) span {
+        animation-delay: 0s !important;
+    }
+</style>
+<body>
+<div class="hidden">
+    <div class="line">
+        <div><span class="roboto-flex wait">подождите</span></div>
+    </div>
+</div>
+</body>
+<script>
+    async function sleep(ms) {
+        return new Promise(r => setTimeout(r, ms));
+    }
+
+    async function main() {
+        const elementLineFirst = document.getElementsByClassName("line")[0];
+        const elementLineFirstSpan =
+            elementLineFirst.firstElementChild.firstElementChild;
+        elementLineFirstSpan.innerHTML += "подождите".repeat(
+            Math.ceil((window.innerWidth * 1.337) / elementLineFirstSpan.clientWidth),
+        );
+        elementLineFirst.innerHTML += elementLineFirst.firstElementChild.outerHTML;
+        document.body.firstElementChild.innerHTML +=
+            elementLineFirst.outerHTML.repeat(
+                Math.ceil(
+                    (window.innerHeight * 1.337) /
+                    document.getElementsByClassName("wait")[0].clientHeight,
+                ),
+            );
+
+        await sleep(337);
+        document.body.firstElementChild.classList.remove("hidden");
+
+        const dateSinceLoopStart = new Date();
+        do {
+            await sleep(337);
+        } while ((document.readyState !== "complete") || ((new Date() - dateSinceLoopStart) < 3000));
+
+        window.location.replace("https://github.com/dvdv-dev");
+    }
+
+    main();
+</script>
+</html>
